@@ -3,6 +3,8 @@ const fs = require('fs');
 
 const startLink = 'https://reports.dbtfert.nic.in/mfmsReports/getfarmerBuyingDetail.action';
 
+// let count = 0;
+
 const downloadDir = __dirname + '/csv';
 if (!fs.existsSync(downloadDir)) {
 	fs.mkdirSync(downloadDir);
@@ -63,7 +65,7 @@ function checkDate() {
 				let states = [];
 
 				// Replace lower limit with 3, upper limit with selectState.childNodes.length when want all states
-				for (let i = 3; i < 11; i += 2) {
+				for (let i = 3; i < selectState.childNodes.length; i += 2) {
 					states.push({ state: selectState.childNodes[i].value, index: i });
 				}
 				return states;
@@ -207,7 +209,7 @@ async function downloadFile(page, link, currentState, retryCount) {
 	});
 
 	if (csvData == null) {
-		console.log('Link for ', filename, 'is empty');
+		console.log('Link for', filename, 'is empty');
 	}
 
 	fs.writeFile(`csv/${filename}`, csvData, 'utf8', function (err) {
@@ -224,6 +226,7 @@ async function downloadFile(page, link, currentState, retryCount) {
 			}
 		} else {
 			console.log(`${filename} saved successfully`);
+			// count++;
 		}
 	});
 }
